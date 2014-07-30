@@ -19,7 +19,8 @@
     "socket.io": "~1.0.6",
     "ntwitter": "~0.5.0",
     "q": "~1.0.1",
-    "twilio": "~1.6.0"
+    "twilio": "~1.6.0",
+    "newrelic": "~1.9.0"
   },
   "engines": {
     "node": "0.10.26",
