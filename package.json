@@ -1,0 +1,28 @@
+{
+  "name": "the-queue",
+  "version": "0.0.1",
+  "description": "wait time webapp",
+  "main": "web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "sequelize": "~1.7.9",
+    "pg": "~2.11.1",
+    "ejs": "~0.8.4",
+    "express": "~3.4.8",
+    "async": "~0.2.10",
+    "request": "~2.27.0",
+    "underscore": "~1.5.2",
+    "redis": "~0.10.3",
+    "jwt-simple": "~0.2.0",
+    "socket.io": "~1.0.6",
+    "ntwitter": "~0.5.0",
+    "q": "~1.0.1",
+    "twilio": "~1.6.0"
+  },
+  "engines": {
+    "node": "0.10.26",
+    "npm": "1.4.6"
+  }
+}
