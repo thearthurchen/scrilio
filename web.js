@@ -5,7 +5,7 @@ var express = require('express')
   , twilio = require('twilio')
   , routes  = require('./routes');
 
-var twilioClient = new twilio.RestClient('ACe6c487b892d29cc9f99f639f1f487315', 'd7adf8cb5bcc27a963ed69089d294d29');
+var twilioClient = new twilio.RestClient(process.env.TWILIO_SID, process.env.TWILIO_AUTH);
   
 var app = express();
 app.set('views', __dirname + '/views');
@@ -46,7 +46,7 @@ setInterval(function() {
 				console.log('STATUS CHANGED NOTIFYING PEOPLE');
 				twilioClient.sms.messages.create({
 					to:'+14083862554',
-					from:'+14085164217',
+					from:process.env.TWILIO_NUM,
 					body:'STATUS CHANGED'
 				}, function(error, message) {
 					// The HTTP request to Twilio will run asynchronously. This callback
