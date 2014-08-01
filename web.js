@@ -5,6 +5,7 @@ var express = require('express')
   , path    = require('path')
   , async   = require('async')
   , twilio = require('twilio')
+  , request = require('request')
   , routes  = require('./routes');
 
 var twilioClient = new twilio.RestClient(process.env.TWILIO_SID, process.env.TWILIO_AUTH);
@@ -17,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded());	
-
+ 
 for(var ii in routes.ROUTES) {
     app.get(routes.ROUTES[ii].path, routes.ROUTES[ii].fn);
 }
@@ -31,19 +32,18 @@ server.listen(app.get('port'), function() {
 });
 // Start a simple daemon to backup database and probably clear out disconnected sockets?
 setInterval(function() {
-	var start = 0;
-	var found = 0;
-	var newregex = /soldout_msg_26649665_None/;
-	var data = "";
-	http.get("http://www.eventbrite.com/e/hackathon-at-techcrunch-disrupt-sf-2014-tickets-12058143231", function(res) {
-		res.on('data', function (chunk) {
-			data += chunk;
-		});
-		res.on("end", function() {
-		  result = data.match(newregex);
+	var newregex = /soldout_msg_26649665_None/im;
+	  request.get("http://www.eventbrite.com/e/hackathon-at-techcrunch-disrupt-sf-2014-tickets-12058143231",
+	function(err, res, body) {
+		if (!!err) {
+			console.log(null);
+		} else {
+			var result = body.match(newregex);
 			if (result != null) {
 				console.log("STILL SOLD OUT");
 				console.log(result[0]);
+			} else if (body == "") {
+				console.log('the body is null wtf?');
 			} else {
 				console.log('STATUS CHANGED NOTIFYING PEOPLE');
 				twilioClient.sms.messages.create({
@@ -67,12 +67,11 @@ setInterval(function() {
 					} else {
 						console.log('Oops! There was an error.');
 					}
-				});
+				}); 
 			}
-		});
-	  }).on("error", function() {
-		console.log(null);
-	  });
+		}
+	});
+	
 //keep on refreshing every 5 minutes to find non updated stuff?
 //global.db.heartbleed.purgeBeats sms? we need to have sockets..or have angular do work
 }, DB_REFRESH_INTERVAL_SECONDS*1000);
